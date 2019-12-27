@@ -2,7 +2,16 @@ require("dotenv").config();
 var keys = require("./keys.js");
 // var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
-var searchTerm = process.argv[3];
+var combineArgument = process.argv;
+var searchTerm = "";
+
+for (var i = 3; i < combineArgument.length; i++) {
+    if (i > 3 && i < combineArgument.length) {
+      searchTerm = searchTerm + "+" + combineArgument[i];
+    } else {
+      searchTerm += combineArgument[i];
+    }
+}
 
 if (process.argv[2] === "concert-this") {
     axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
