@@ -2,12 +2,11 @@ require("dotenv").config();
 var keys = require("./keys.js");
 // var spotify = new Spotify(keys.spotify);
 var axios = require("axios");
-var searchTerm = process.argv[2];
+var searchTerm = process.argv[3];
 
 if (process.argv[2] === "concert-this") {
     axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
     function(response) {
-        console.log(response);
         console.log("Name of Venue: " + response.data.venue.name);
         console.log("Venue Location: " + response.data.venue.city + "," + response.data.venue.region);
         console.log("Date of Event: " + response.data.datetime);
@@ -50,9 +49,15 @@ if (process.argv[2] === "concert-this") {
 } else if (process.argv[2] === "movie-this") {
     axios.get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy").then(
     function(response) {
-        console.log("The movie's rating is: " + response.data.imdbRating);
+        console.log("Title: " + response.data.Title);
+        console.log("Year: " + response.data.Year);
+        console.log("IMDB Rating: " + response.data.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+        console.log("Country: " + response.data.Country);
+        console.log("Language: " + response.data.Language);
+        console.log("Plot: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
     })
-
 } else if (process.argv[2] === "do-what-it-says") {
 
 } else {
