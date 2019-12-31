@@ -1,7 +1,9 @@
 require("dotenv").config();
 var keys = require("./keys.js");
-// var spotify = new Spotify(keys.spotify);
+var Spotify = require("node-spotify-api");
 var axios = require("axios");
+var fs = require("fs");
+var spotify = new Spotify(keys.spotify);
 var combineArgument = process.argv;
 var searchTerm = "";
 
@@ -14,6 +16,36 @@ for (var i = 3; i < combineArgument.length; i++) {
 }
 
 if (process.argv[2] === "concert-this") {
+    concertThis();
+} else if (process.argv[2] === "spotify-this-song") {
+    spotifyThis();
+} else if (process.argv[2] === "movie-this") {
+    movieThis();
+} else if (process.argv[2] === "do-what-it-says") {
+    fs.readFile("random.txt", "utf8", function(err, data) {
+        if (err) {
+          return console.log(err);
+        }
+
+        var dataArr =  data.split(",");
+        var request = dataArr[0];
+        searchTerm = dataArr[1];
+        
+        if (request === "concert-this") {
+            concertThis();
+        } else if (request === "spotify-this-song") {
+            spotifyThis();
+        } else if (request === "movie-this") {
+            movieThis();
+        }
+    });
+
+} else {
+    console.log("Your request was not recognized.  Please try again.");
+}
+
+
+function concertThis() {
     axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
     function(response) {
         for (var i = 0; i < response.data.length; i++) {
@@ -23,12 +55,20 @@ if (process.argv[2] === "concert-this") {
             console.log("---------------------------------------")
         }
     });
-} else if (process.argv[2] === "spotify-this-song") {
-    axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
-    function(response) {
-        console.log("The movie's rating is: " + response.data.imdbRating);
+}
+
+function spotifyThis() {
+    spotify
+    .search({ type: 'track', query: searchTerm })
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(err) {
+        console.log(err);
     });
-} else if (process.argv[2] === "movie-this") {
+}
+
+function movieThis() {
     axios.get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy").then(
     function(response) {
         console.log("Title: " + response.data.Title);
@@ -40,8 +80,4 @@ if (process.argv[2] === "concert-this") {
         console.log("Plot: " + response.data.Plot);
         console.log("Actors: " + response.data.Actors);
     });
-} else if (process.argv[2] === "do-what-it-says") {
-
-} else {
-    console.log("Please try again");
 }
