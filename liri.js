@@ -44,7 +44,6 @@ if (process.argv[2] === "concert-this") {
     console.log("Your request was not recognized.  Please try again.");
 }
 
-
 function concertThis() {
     axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
     function(response) {
@@ -69,15 +68,32 @@ function spotifyThis() {
 }
 
 function movieThis() {
-    axios.get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy").then(
-    function(response) {
-        console.log("Title: " + response.data.Title);
-        console.log("Year: " + response.data.Year);
-        console.log("IMDB Rating: " + response.data.imdbRating);
-        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-        console.log("Country: " + response.data.Country);
-        console.log("Language: " + response.data.Language);
-        console.log("Plot: " + response.data.Plot);
-        console.log("Actors: " + response.data.Actors);
-    });
+    if (searchTerm === "") {
+        searchTerm === "Mr. Nobody"
+        console.log("If you haven't watched Mr. Nobody then you should: <http://www.imdb.com/title/tt0485947/>")
+        console.log("It's on Netflix!");
+        axios.get("http://www.omdbapi.com/?t=Mr.Nobody&y=&plot=short&apikey=trilogy").then(
+        function(response) {
+            console.log("Title: " + response.data.Title);
+            console.log("Year: " + response.data.Year);
+            console.log("IMDB Rating: " + response.data.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+            console.log("Country: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Plot: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
+        });
+    } else {
+        axios.get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy").then(
+        function(response) {
+            console.log("Title: " + response.data.Title);
+            console.log("Year: " + response.data.Year);
+            console.log("IMDB Rating: " + response.data.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+            console.log("Country: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Plot: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
+        });
+    }
 }
