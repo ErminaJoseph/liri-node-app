@@ -3,9 +3,11 @@ var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
 var fs = require("fs");
+var moment = require('moment');
 var spotify = new Spotify(keys.spotify);
 var combineArgument = process.argv;
 var searchTerm = "";
+var request = process.argv[2];
 
 for (var i = 3; i < combineArgument.length; i++) {
     if (i > 3 && i < combineArgument.length) {
@@ -15,20 +17,20 @@ for (var i = 3; i < combineArgument.length; i++) {
     }
 }
 
-if (process.argv[2] === "concert-this") {
+if (request === "concert-this") {
     concertThis();
-} else if (process.argv[2] === "spotify-this-song") {
+} else if (request === "spotify-this-song") {
     spotifyThis();
-} else if (process.argv[2] === "movie-this") {
+} else if (request === "movie-this") {
     movieThis();
-} else if (process.argv[2] === "do-what-it-says") {
+} else if (request === "do-what-it-says") {
     fs.readFile("random.txt", "utf8", function(err, data) {
         if (err) {
           return console.log(err);
         }
 
         var dataArr =  data.split(",");
-        var request = dataArr[0];
+        request = dataArr[0];
         searchTerm = dataArr[1];
         
         if (request === "concert-this") {
@@ -50,7 +52,10 @@ function concertThis() {
         for (var i = 0; i < response.data.length; i++) {
             console.log("Name of Venue: " + response.data[i].venue.name);
             console.log("Venue Location: " + response.data[i].venue.city + "," + response.data[i].venue.region);
-            console.log("Date of Event: " + response.data[i].datetime);
+            var eventDateInfo = response.data[i].datetime;
+            var eventArr = eventDateInfo.split("T");
+            var eventDate = eventArr[0];
+            console.log("Date of Event: " + moment(eventDate).format("MM/DD/YYYY"));
             console.log("---------------------------------------")
         }
     });
