@@ -1,14 +1,23 @@
+// Read and set environment variables with dontenv package.
 require("dotenv").config();
-var keys = require("./keys.js");
+
+
+// Incorporating packages
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
 var fs = require("fs");
 var moment = require('moment');
+
+// Adding spotify key
+var keys = require("./keys.js");
 var spotify = new Spotify(keys.spotify);
+
+// declaring variables
 var combineArgument = process.argv;
 var searchTerm = "";
 var request = process.argv[2];
 
+// Allows multiple words to be used as fourth command in command line
 for (var i = 3; i < combineArgument.length; i++) {
     if (i > 3 && i < combineArgument.length) {
       searchTerm = searchTerm + "+" + combineArgument[i];
@@ -17,6 +26,7 @@ for (var i = 3; i < combineArgument.length; i++) {
     }
 }
 
+// If/else statements which determines the function to be used.
 if (request === "concert-this") {
     concertThis();
 } else if (request === "spotify-this-song") {
@@ -46,6 +56,7 @@ if (request === "concert-this") {
     console.log("Your request was not recognized.  Please try again.");
 }
 
+// Function used if concert-this is chosen
 function concertThis() {
     axios.get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp").then(
     function(response) {
@@ -58,6 +69,7 @@ function concertThis() {
     });
 }
 
+// Function used if spotify-this-song is chosen
 function spotifyThis() {
     spotify
     .search({ type: 'track', query: searchTerm })
@@ -69,6 +81,7 @@ function spotifyThis() {
     });
 }
 
+// Function used if movie-this is chosen
 function movieThis() {
     if (searchTerm === "") {
         searchTerm === "Mr. Nobody"
