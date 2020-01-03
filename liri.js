@@ -51,11 +51,8 @@ function concertThis() {
     function(response) {
         for (var i = 0; i < response.data.length; i++) {
             console.log("Name of Venue: " + response.data[i].venue.name);
-            console.log("Venue Location: " + response.data[i].venue.city + "," + response.data[i].venue.region);
-            var eventDateInfo = response.data[i].datetime;
-            var eventArr = eventDateInfo.split("T");
-            var eventDate = eventArr[0];
-            console.log("Date of Event: " + moment(eventDate).format("MM/DD/YYYY"));
+            console.log("Venue Location: " + response.data[i].venue.city + ", " + response.data[i].venue.region + " " + response.data[i].venue.country);
+            console.log("Date of Event: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
             console.log("---------------------------------------")
         }
     });
