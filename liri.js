@@ -1,12 +1,11 @@
 // Read and set environment variables with dontenv package.
 require("dotenv").config();
 
-
 // Incorporating packages
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
 var fs = require("fs");
-var moment = require('moment');
+var moment = require("moment");
 
 // Adding spotify key
 var keys = require("./keys.js");
@@ -71,20 +70,41 @@ function concertThis() {
 
 // Function used if spotify-this-song is chosen
 function spotifyThis() {
-    spotify
-    .search({ type: 'track', query: searchTerm })
-    .then(function(response) {
-        console.log(response);
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
+    if (searchTerm === "") {
+        spotify
+        .search({ type: 'track', query: "The Sign Ace of Base" })
+        .then(function(response) {
+            console.log("So you didn't choose anything, but here's great song from the 90's!")
+            console.log("Artist: " + response.tracks.items[0].album.artists[0].name);
+            console.log("Song Title: " + response.tracks.items[0].name);
+            console.log("Preview: " + response.tracks.items[0].preview_url);
+            console.log("Album Title: " + response.tracks.items[0].album.name);
+            console.log("---------------------------------------");
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+    } else {
+        spotify
+        .search({ type: 'track', query: searchTerm })
+        .then(function(response) {
+            for (var i = 0; i < response.tracks.items.length; i++ ) {
+                console.log("Artist: " + response.tracks.items[i].album.artists[0].name);
+                console.log("Song Title: " + response.tracks.items[i].name);
+                console.log("Preview: " + response.tracks.items[i].preview_url);
+                console.log("Album Title: " + response.tracks.items[i].album.name);
+                console.log("---------------------------------------");
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+    }
 }
 
 // Function used if movie-this is chosen
 function movieThis() {
     if (searchTerm === "") {
-        searchTerm === "Mr. Nobody"
         console.log("If you haven't watched Mr. Nobody then you should: <http://www.imdb.com/title/tt0485947/>")
         console.log("It's on Netflix!");
         axios.get("http://www.omdbapi.com/?t=Mr.Nobody&y=&plot=short&apikey=trilogy").then(
