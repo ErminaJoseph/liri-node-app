@@ -65,6 +65,9 @@ function concertThis() {
             console.log("Date of Event: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
             console.log("---------------------------------------")
         }
+    })
+    .catch(function(err) {
+        console.log(err);
     });
 }
 
@@ -117,6 +120,9 @@ function movieThis() {
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
             console.log("Actors: " + response.data.Actors);
+        })
+        .catch(function(err) {
+            console.log(err);
         });
     } else {
         axios.get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy").then(
@@ -129,6 +135,9 @@ function movieThis() {
             console.log("Language: " + response.data.Language);
             console.log("Plot: " + response.data.Plot);
             console.log("Actors: " + response.data.Actors);
+        })
+        .catch(function(err) {
+            console.log(err);
         });
     }
 }
